@@ -2,7 +2,7 @@ import time
 import os
 
 import board
-from adafruit_lc709203f import LC709023F
+from adafruit_lc709203f import LC709023F, PackSize
 from prometheus_client import start_http_server, Gauge
 
 
@@ -16,6 +16,10 @@ SECONDS_BETWEEN_READINGS = int(os.getenv('SECONDS_BETWEEN_READINGS', '5'))
 print('## LC709023F battery monitor ##')
 try:
     print(f'Sensor IC version: {hex(sensor.ic_version)}')
+    # Set the battery pack size to 3000 mAh
+    sensor.pack_size = PackSize.MAH3000
+    sensor.init_RSOC()
+    print(f'Battery size: {PackSize.string[sensor.pack_sizes]}')
 except RuntimeError as exception:
     print(f'Failed to read sensor with error: {exception}')
     print('Try setting the I2C clock speed to 10000Hz')
