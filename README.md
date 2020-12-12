@@ -6,6 +6,6 @@ Based on the [Adafruit example](https://github.com/adafruit/Adafruit_CircuitPyth
 
 ## Read errors
 
-If you come across the error: `RuntimeError: CRC failure on reading word`, you might need to set the I2C clock to 10,000Hz.
+If you come across the error: `RuntimeError: CRC failure on reading word`, you might need to [set the I2C clock to 10,000Hz](https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/i2c-clock-stretching).
 
 To do this in Balena, add `i2c_arm_baudrate=10000` to the `Device Configuration` tab, `Define DT parameters`, so the full entry is: `"i2c_arm=on","spi=on","audio=on","i2c_arm_baudrate=10000"`
