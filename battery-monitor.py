@@ -14,13 +14,22 @@ DEBUG = os.getenv('DEBUG', 'false') == 'true'
 SECONDS_BETWEEN_READINGS = int(os.getenv('SECONDS_BETWEEN_READINGS', '5'))
 
 print('## LC709023F battery monitor ##')
-print(f'Sensor IC version: {hex(sensor.ic_version)}')
+try:
+    print(f'Sensor IC version: {hex(sensor.ic_version)}')
+except RuntimeError as exception:
+    print(f'Failed to read sensor with error: {exception}')
+    print('Try setting the I2C clock speed to 10000Hz')
 
 start_http_server(addr='0.0.0.0', port=8001)
 
 while True:
-    voltage_reading = sensor.cell_voltage
-    percentage_reading = sensor.cell_percent
+    voltage_reading = 0.0
+    percentage_reading = 0.0
+    try:
+        voltage_reading = sensor.cell_voltage
+        percentage_reading = sensor.cell_percent
+    except RuntimeError as exception:
+        print(f'Failed to read sensor with error: {exception}')
     if DEBUG:
         print(f'Battery: {voltage_reading} Volts / {percentage_reading}%')
     VOLTAGE.set(voltage_reading)
